@@ -62,7 +62,7 @@ mrk418
 mtn217
 nmc217
 npg216
-nrd218
+nrd218 CROP FLAN
 nrt218
 pat217
 plb218
