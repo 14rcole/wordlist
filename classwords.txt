@@ -74,7 +74,7 @@ sag318
 sfr218 SALE LONG
 shz217
 sif217
-spk318
+spk318 COPY FAIL
 srs217
 sst218
 suc217
