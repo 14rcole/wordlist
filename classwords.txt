@@ -13,7 +13,7 @@ clf217
 cyt219
 dag217
 dat218
-ded218
+ded218 WELL FAIR 
 dez217
 djb218 CAKE MITT
 djc218 PINE LOGO
