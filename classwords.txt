@@ -65,7 +65,7 @@ npg216
 nrd218 CROP FLAN
 nrt218
 pat217
-plb218
+plb218 COAL PIMP
 rbc218
 rdc217
 rkl218
