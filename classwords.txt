@@ -88,5 +88,5 @@ wcn217
 wec217 DASH LEFT
 wld217
 xizd13
-yuc217
+yuc217 YANK WOVE
 xxxxxx aaaa bbbb
