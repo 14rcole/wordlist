@@ -29,6 +29,7 @@ prog8::WordSearch::WordSearch(string start, string end, string dictionary){
 prog8::WordSearch::~WordSearch(){
     delete begin;
     dictStream.close();
+    remove("newWords");
 }
 
 stack<string> prog8::WordSearch::findWordPath(){
@@ -134,12 +135,11 @@ void printStack(stack<string> st){
         return;
     }
 
-    cout << st.top();
-    st.pop();
     while(!st.empty()){
-        cout << "-->" << st.top();
+        cout << st.top() << " ";
         st.pop();
     }
+    cout << endl;
 }
 
 int main(){
