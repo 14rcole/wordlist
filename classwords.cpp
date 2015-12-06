@@ -1,3 +1,10 @@
+/*Ryan Cole
+ * rbc218
+ * Classwords program
+ * Takes two words and determines the shortest path between them by changing
+ * one letter at a time to form a new word
+ */
+//Including a LOT of stuff
 #include <string>
 #include <list>
 #include <stack>
@@ -11,6 +18,8 @@
 
 using namespace std;
 
+/* Constructor for the WordSearch class
+ */
 prog8::WordSearch::WordSearch(string start, string end, string dictionary){
     if(start.length() != end.length()){
         cerr << "Error: words must be of the same length";
@@ -26,18 +35,24 @@ prog8::WordSearch::WordSearch(string start, string end, string dictionary){
     dictStream.open("newWords", fstream::in | fstream::out);
 }
 
+/* Destructor for the WordSearch class
+ */
 prog8::WordSearch::~WordSearch(){
     delete begin;
     dictStream.close();
     remove("newWords");
 }
 
+/* Method that calls a breadth first search to get the WordSearchNode for the
+ * goal (if it exists).  It then constructs a stack of all of the words tracing
+ * back to the beginning node and returns that
+ */
 stack<string> prog8::WordSearch::findWordPath(){
     list<prog8lib::WordSearchNode*> beginList;
     beginList.push_front(begin);
     prog8lib::WordSearchNode* endNode = breadthFirstSearch(beginList);
     stack<string> wordPath; 
-    if(endNode == NULL){
+    if(endNode->getWord() == ""){ 
         return wordPath;
     }
     prog8lib::WordSearchNode* curNode = endNode;
@@ -49,6 +64,10 @@ stack<string> prog8::WordSearch::findWordPath(){
     return wordPath;
 }
 
+/*A breadth first search
+ * Searches through all the possible "paths" at each level until it finds the
+ * goal, then returns the goal
+ */ 
 prog8lib::WordSearchNode* prog8::WordSearch::breadthFirstSearch(list<prog8lib::WordSearchNode*> words){
     list<prog8lib::WordSearchNode*> neighbors;
     for(list<prog8lib::WordSearchNode*>::iterator it=words.begin(); it != words.end(); it++){
@@ -57,8 +76,7 @@ prog8lib::WordSearchNode* prog8::WordSearch::breadthFirstSearch(list<prog8lib::W
     }
 
     if(neighbors.size() == 0){
-        cout << "No path between " << begin->getWord() << " and " << goal << endl;
-        return new prog8lib::WordSearchNode(NULL, NULL);
+        return new prog8lib::WordSearchNode("", NULL);
     }
 
     for(list<prog8lib::WordSearchNode*>::iterator it = neighbors.begin(); it != neighbors.end(); it++){
@@ -70,6 +88,10 @@ prog8lib::WordSearchNode* prog8::WordSearch::breadthFirstSearch(list<prog8lib::W
     return breadthFirstSearch(neighbors);
 }
 
+/* For a given word, iterates through the dictionary and finds all words with
+ * an edit distance of one from it where the changed letter is not the same as
+ * the previously changed letter
+ */
 list<prog8lib::WordSearchNode*> prog8::WordSearch::findNeighbors(prog8lib::WordSearchNode* node){
     dictStream.seekg(0, dictStream.beg);
     string current = node->getWord();
@@ -96,6 +118,10 @@ list<prog8lib::WordSearchNode*> prog8::WordSearch::findNeighbors(prog8lib::WordS
     return neighbors;
 }
 
+/* Calculates the edit distance between the two strings
+ * Each letter that is different changes the edit distance by one
+ * Assumes both strings are of the same length
+ */
 int prog8::WordSearch::editDistance(string word1, string word2){
     int dist = 0;
     for(unsigned int i = 0; i < word1.size(); i++){
@@ -120,6 +146,9 @@ int prog8::WordSearch::diffIndex(string word1, string word2){
     return -1;
 }
 
+/*Checks the usedWords list to see if the passed in word has been used in the
+ * search already
+ */
 bool prog8::WordSearch::used(string word){
     for(list<string>::iterator it = usedWords.begin(); it != usedWords.end(); it++){
         if(word.compare((*it)) == 0){
@@ -129,6 +158,9 @@ bool prog8::WordSearch::used(string word){
     return false;
 }
 
+/*Not a part of any class, but prints each item in the passed in stack,
+ * separated by a space
+ */
 void printStack(stack<string> st){
     if(st.empty()){
         cerr << "No path between the two words\n";
@@ -142,12 +174,26 @@ void printStack(stack<string> st){
     cout << endl;
 }
 
+/* Main method
+ */
 int main(){
-    string word1 = "ABED";
-    string word2 = "BUTT";
-    prog8::WordSearch ws(word1, word2, "words");
-    stack<string> path = ws.findWordPath();
-    cout << "The path between " << word1 << " and " << word2 << " is\n";
-    printStack(path);
+    fstream classWords("classwords.txt", fstream::in);
+    int c = classWords.peek();
+    string line;
+    while(c != EOF){
+        getline(classWords, line);
+        istringstream linestream(line);
+        string user, word1, word2;
+        getline(linestream, user, ' ');
+        getline(linestream, word1, ' ');
+        getline(linestream, word2, '\n');
+        if(word1.length() >= 1){
+            prog8::WordSearch ws(word1, word2, "words");
+            cout << "The path between " << word1 << " and " << word2 << " is\n";
+            stack<string> path = ws.findWordPath();
+            printStack(path);
+        }
+        c = classWords.peek();
+    }
     return 0;
 }

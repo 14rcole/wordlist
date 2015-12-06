@@ -10,6 +10,10 @@
 
 using namespace std;
 namespace prog8 {
+    /* Class declaration for the main class
+     * When findWordPath is called, a breadth first search is used to search
+     * through the dictionary to find the shortest path
+     */
     class WordSearch {
         public:
             WordSearch(string start, string end, string dictionary);

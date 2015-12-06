@@ -7,6 +7,10 @@
 using namespace std;
 
 namespace prog8lib{
+    /*Class definition for the wordSearchNode object
+     * Stores data about the current word and its parent so that it can be
+     * backtraced later on to output the path between the start and the goal
+     */
     class WordSearchNode {
         public:
             WordSearchNode(string w, WordSearchNode* parent);
